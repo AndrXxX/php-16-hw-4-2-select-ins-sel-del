@@ -11,7 +11,18 @@ $password = 'neto1262';
 const TASK_STATE_COMPLETE = 2;
 const TASK_STATE_IN_PROGRESS = 1;
 
-$pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $password);
+$pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
+$sqlCreate = "CREATE TABLE IF NOT EXISTS tasks (
+  id int(11) NOT NULL AUTO_INCREMENT,
+  description text NOT NULL,
+  is_done tinyint(4) NOT NULL DEFAULT '0',
+  date_added datetime NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+
+$statement = $pdo->prepare($sqlCreate);
+$statement->execute();
+
 $description = getValueFromRequest('description');
 
 /**
@@ -29,7 +40,7 @@ if (!empty($description) && empty(getValueFromRequest('action'))) {
  */
 if (!empty(getValueFromRequest('id')) && !empty(getValueFromRequest('action'))) {
     $id = (int)getValueFromRequest('id');
-    switch ($_GET['action']) {
+    switch (getValueFromRequest('action')) {
         case 'edit':
             if (!empty($description)) {
                 $sqlEdit = "UPDATE tasks SET description = ? WHERE id = ?";
