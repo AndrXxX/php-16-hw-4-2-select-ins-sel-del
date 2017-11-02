@@ -12,17 +12,6 @@ const TASK_STATE_COMPLETE = 2;
 const TASK_STATE_IN_PROGRESS = 1;
 
 $pdo = new PDO("mysql:host=$host;dbname=$db;charset=utf8", $user, $password, [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-$sqlCreate = "CREATE TABLE IF NOT EXISTS tasks (
-  id int(11) NOT NULL AUTO_INCREMENT,
-  description text NOT NULL,
-  is_done tinyint(4) NOT NULL DEFAULT '0',
-  date_added datetime NOT NULL,
-  PRIMARY KEY (id)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;";
-
-$statement = $pdo->prepare($sqlCreate);
-$statement->execute();
-
 $description = getValueFromRequest('description');
 
 /**
@@ -83,9 +72,6 @@ if (!empty(getValueFromRequest('id')) && !empty(getValueFromRequest('action'))) 
  */
 $sort = !empty(getValueFromRequest('sort_by')) ? getValueFromRequest('sort_by') : 'date_created';
 switch ($sort) {
-    case 'date_created':
-        $sql = "SELECT * FROM tasks ORDER BY date_added";
-        break;
     case 'is_done':
         $sql = "SELECT * FROM tasks ORDER BY is_done";
         break;
@@ -101,19 +87,21 @@ $statement->execute([]);
 
 
 /**
- * Возвращает содержимое $_GET[$request] или пустую строку
+ * Возвращает содержимое $_GET[$request] или $_POST[$request] или пустую строку
  * @param $request
+ * @param bool $needHtmlspecialchars
  * @return string
  */
-function getValueFromRequest($request)
+function getValueFromRequest($request, $needHtmlspecialchars = false)
 {
+    $requestContent = '';
     if (!empty($_GET[$request])) {
-        return htmlspecialchars($_GET[$request]);
+        $requestContent = $_GET[$request];
     }
     if (!empty($_POST[$request])) {
-        return htmlspecialchars($_POST[$request]);
+        $requestContent = $_POST[$request];
     }
-    return '';
+    return $needHtmlspecialchars ? htmlspecialchars($requestContent) : $requestContent;
 }
 
 /**
@@ -169,9 +157,10 @@ function getStatusColor($id)
     <h1>Список дел на сегодня</h1>
     <div style="float: left">
       <form method="POST">
-        <input type="text" name="description" placeholder="Описание задачи" value="<?= $description ?>"/>
+        <input type="text" name="description" placeholder="Описание задачи"
+               value="<?= getValueFromRequest('description', true); ?>"/>
         <input type="submit" name="save"
-               value="<?= isset($_GET['action']) && $_GET['action'] === 'edit' ? 'Сохранить' : 'Добавить' ?>"/>
+               value="<?= getValueFromRequest('action') === 'edit' ? 'Сохранить' : 'Добавить' ?>"/>
       </form>
     </div>
     <div style="float: left; margin-left: 20px;">
