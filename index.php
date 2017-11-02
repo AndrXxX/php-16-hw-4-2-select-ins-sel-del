@@ -94,13 +94,7 @@ $statement->execute([]);
  */
 function getValueFromRequest($request, $needHtmlspecialchars = false)
 {
-    $requestContent = '';
-    if (!empty($_GET[$request])) {
-        $requestContent = $_GET[$request];
-    }
-    if (!empty($_POST[$request])) {
-        $requestContent = $_POST[$request];
-    }
+    $requestContent = !empty($_REQUEST[$request]) ? $_REQUEST[$request] : '';
     return $needHtmlspecialchars ? htmlspecialchars($requestContent) : $requestContent;
 }
 
