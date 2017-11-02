@@ -180,7 +180,7 @@ function getStatusColor($id)
 
       <?php while ($row = $statement->fetch(PDO::FETCH_ASSOC)) : ?>
       <tr>
-        <td><?= $row['description'] ?></td>
+        <td><?= htmlspecialchars($row['description']) ?></td>
         <td><?= $row['date_added'] ?></td>
         <td><span style='color: <?= getStatusColor($row['is_done']) ?>;'><?= getStatusName($row['is_done']) ?></span></td>
         <td>
