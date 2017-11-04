@@ -87,15 +87,13 @@ $statement->execute([]);
 
 
 /**
- * Возвращает содержимое $_GET[$request] или $_POST[$request] или пустую строку
- * @param $request
- * @param bool $needHtmlspecialchars
+ * Возвращает содержимое $_REQUEST[$fieldName] или пустую строку
+ * @param $fieldName
  * @return string
  */
-function getValueFromRequest($request, $needHtmlspecialchars = false)
+function getValueFromRequest($fieldName)
 {
-    $requestContent = !empty($_REQUEST[$request]) ? $_REQUEST[$request] : '';
-    return $needHtmlspecialchars ? htmlspecialchars($requestContent) : $requestContent;
+    return !empty($_REQUEST[$fieldName]) ? $_REQUEST[$fieldName] : '';
 }
 
 /**
@@ -152,7 +150,7 @@ function getStatusColor($id)
     <div style="float: left">
       <form method="POST">
         <input type="text" name="description" placeholder="Описание задачи"
-               value="<?= getValueFromRequest('description', true); ?>"/>
+               value="<?= getValueFromRequest('description'); ?>"/>
         <input type="submit" name="save"
                value="<?= getValueFromRequest('action') === 'edit' ? 'Сохранить' : 'Добавить' ?>"/>
       </form>
