@@ -150,19 +150,20 @@ function getStatusColor($id)
     <div style="float: left">
       <form method="POST">
         <input type="text" name="description" placeholder="Описание задачи"
-               value="<?= getValueFromRequest('description'); ?>"/>
+               value="<?= $description; ?>"/>
         <input type="submit" name="save"
                value="<?= getValueFromRequest('action') === 'edit' ? 'Сохранить' : 'Добавить' ?>"/>
       </form>
     </div>
     <div style="float: left; margin-left: 20px;">
       <form method="POST">
-        <label for="sort">Сортировать по:</label>
-        <select name="sort_by">
-          <option <?= $sort === 'date_created' ? 'selected' : '' ?> value="date_created">Дате добавления</option>
-          <option <?= $sort === 'is_done' ? 'selected' : '' ?> value="is_done">Статусу</option>
-          <option <?= $sort === 'description' ? 'selected' : '' ?> value="description">Описанию</option>
-        </select>
+        <label>Сортировать по:
+          <select name="sort_by">
+            <option <?= $sort === 'date_created' ? 'selected' : '' ?> value="date_created">Дате добавления</option>
+            <option <?= $sort === 'is_done' ? 'selected' : '' ?> value="is_done">Статусу</option>
+            <option <?= $sort === 'description' ? 'selected' : '' ?> value="description">Описанию</option>
+          </select>
+        </label>
         <input type="submit" name="sort" value="Отсортировать"/>
       </form>
     </div>
