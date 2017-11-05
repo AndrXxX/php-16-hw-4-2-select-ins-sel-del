@@ -5,8 +5,8 @@ $homeWorkCaption = 'Запросы SELECT, INSERT, UPDATE и DELETE.';
 
 $host = 'localhost';
 $db = 'global';
-$user = 'garetov';
-$password = 'neto1262';
+$user = '123';
+$password = '123';
 
 const TASK_STATE_COMPLETE = 2;
 const TASK_STATE_IN_PROGRESS = 1;
