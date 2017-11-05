@@ -93,7 +93,7 @@ $statement->execute([]);
  */
 function getValueFromRequest($fieldName)
 {
-    return !empty($_REQUEST[$fieldName]) ? $_REQUEST[$fieldName] : '';
+    return $_REQUEST[$fieldName] ?? '';
 }
 
 /**
